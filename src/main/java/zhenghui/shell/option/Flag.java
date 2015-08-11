@@ -8,22 +8,22 @@ import java.util.List;
  * date: 2015/8/10
  * time :22:53
  * email: zhenghui.cjb@taobao.com
- *  ²ÎÊıÀàĞÍ Flag
+ *  å‚æ•°ç±»å‹ Flag
  */
 public class Flag {
 
     /**
-     * Ãû×ÖÁĞ±í £¬±ÈÈç -f -flag
+     * åå­—åˆ—è¡¨ ï¼Œæ¯”å¦‚ -f -flag
      */
     private List<String> names = new ArrayList<String>();
 
     /**
-     * ÃèÊö
+     * æè¿°
      */
     private String description;
 
     /**
-     * Ä¬ÈÏÖµ
+     * é»˜è®¤å€¼
      */
     private Boolean defaultValue;
 
@@ -49,5 +49,14 @@ public class Flag {
 
     public void setDefaultValue(Boolean defaultValue) {
         this.defaultValue = defaultValue;
+    }
+
+    @Override
+    public String toString() {
+        return "Flag{" +
+                "names=" + names +
+                ", description='" + description + '\'' +
+                ", defaultValue=" + defaultValue +
+                '}';
     }
 }

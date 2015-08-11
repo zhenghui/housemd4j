@@ -8,21 +8,21 @@ import java.util.List;
  * date: 2015/8/10
  * time :22:44
  * email: zhenghui.cjb@taobao.com
- * ²ÎÊıÀàĞÍ Option
+ * å‚æ•°ç±»å‹ Option
  */
 public class Option {
     /**
-     * Ãû×ÖÁĞ±í £¬±ÈÈç -key -k
+     * åå­—åˆ—è¡¨ ï¼Œæ¯”å¦‚ -key -k
      */
     private List<String> names = new ArrayList<String>();
 
     /**
-     * ÃèÊö
+     * æè¿°
      */
     private String description;
 
     /**
-     * Ä¬ÈÏÖµ
+     * é»˜è®¤å€¼
      */
     private String defaultValue;
 
@@ -48,5 +48,14 @@ public class Option {
 
     public void setDefaultValue(String defaultValue) {
         this.defaultValue = defaultValue;
+    }
+
+    @Override
+    public String toString() {
+        return "Option{" +
+                "names=" + names +
+                ", description='" + description + '\'' +
+                ", defaultValue='" + defaultValue + '\'' +
+                '}';
     }
 }
