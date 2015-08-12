@@ -59,18 +59,18 @@
             <groupId>com.github.zhongl</groupId>
             <artifactId>yascli_2.10</artifactId>
             <version>0.2.0</version>
-            <!--<exclusions>-->
-                <!--<exclusion>-->
-                    <!--<groupId>org.scala-lang</groupId>-->
-                    <!--<artifactId>scala-library</artifactId>-->
-                <!--</exclusion>-->
-            <!--</exclusions>-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.scala-lang</groupId>
+                    <artifactId>scala-library</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.scala-lang</groupId>-->
-            <!--<artifactId>scala-library</artifactId>-->
-            <!--<version>2.11.4</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>2.11.4</version>
+        </dependency>
     </dependencies>
 
 </project>
