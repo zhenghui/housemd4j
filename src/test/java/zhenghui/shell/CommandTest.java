@@ -1,26 +1,31 @@
-package zhenghui;
-
-import zhenghui.shell.Command;
+package zhenghui.shell;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 /**
- * user: zhenghui on 2015/8/4.
- * date: 2015/8/4
- * time :22:02
- * email: zhenghui.cjb@taobao.com
+ * User: zhenghui
+ * Date: 15-8-12
+ * Time: ä¸‹åˆ8:38
+ * command test
  */
-public class Test {
+public class CommandTest {
 
+    /**
+     * ç”¨ -f  --single-value option value ä½œä¸ºå‚æ•°æ‰§è¡Œ
+     */
     public static void main(String[] args) throws Exception {
-        Command command = new Command();
-        //ĞÂÔöÖ§³ÖµÄflag option parameter
-        command.addFlag(Arrays.asList("-f","--flag"),"enable flag",false);
+        Command command = new Command("TestCommand") {
+            @Override
+            public void run() {
+                System.out.println("it is my test command");
+            }
+        };
+        //æ–°å¢æ”¯æŒçš„flag option parameter
+        command.addFlag(Arrays.asList("-f", "--flag"),"enable flag",false);
         command.addOption(Collections.singletonList("--single-value"),"set single value","value");
         command.addParameter("param","set param");
-        //½âÎö²ÎÊı
+        //è§£æå‚æ•°
         command.parse(args);
 
         if(command.getFlag("-h")){

@@ -3,8 +3,8 @@ package zhenghui.shell;
 import zhenghui.shell.option.Flag;
 import zhenghui.shell.option.Option;
 import zhenghui.shell.option.Parameter;
-import zhenghui.shell.option.exception.ConvertingException;
-import zhenghui.shell.option.exception.UnknownOptionException;
+import zhenghui.shell.exception.ConvertingException;
+import zhenghui.shell.exception.UnknownOptionException;
 
 import java.util.*;
 
@@ -14,7 +14,7 @@ import java.util.*;
  * time :22:01
  * email: zhenghui.cjb@taobao.com
  */
-public class Command {
+public abstract class Command implements Runnable{
 
     /**
      * 命令名字
@@ -47,7 +47,9 @@ public class Command {
     private Map<String,String> values = new HashMap<String, String>();
 
 
-    public Command() {
+    public Command(String name) {
+        this.name = name;
+
         //默认添加help 的flag
         List<String> names = Arrays.asList("-h","--help");
         String desc = "show help infomation of this command.";

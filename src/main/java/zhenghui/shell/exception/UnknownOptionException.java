@@ -1,4 +1,4 @@
-package zhenghui.shell.option.exception;
+package zhenghui.shell.exception;
 
 /**
  * user: zhenghui on 2015/8/10.
