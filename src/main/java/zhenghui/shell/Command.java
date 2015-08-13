@@ -5,6 +5,9 @@ import zhenghui.shell.option.Option;
 import zhenghui.shell.option.Parameter;
 import zhenghui.shell.exception.ConvertingException;
 import zhenghui.shell.exception.UnknownOptionException;
+import zhenghui.shell.print.Loggable;
+import zhenghui.shell.print.PrintOut;
+import zhenghui.shell.print.PrintOutFactory;
 
 import java.util.*;
 
@@ -14,7 +17,7 @@ import java.util.*;
  * time :22:01
  * email: zhenghui.cjb@taobao.com
  */
-public abstract class Command implements Runnable{
+public abstract class Command extends Loggable implements Runnable{
 
     /**
      * 命令名字
@@ -25,6 +28,11 @@ public abstract class Command implements Runnable{
      * 描述
      */
     private String description;
+
+    /**
+     * 输出流，默认是System.out
+     */
+    private PrintOut printOut = PrintOutFactory.build(System.out);
 
     /**
      * 所有支持的flags
@@ -180,6 +188,11 @@ public abstract class Command implements Runnable{
         read(Arrays.asList(args));
     }
 
+    @Override
+    public PrintOut getPrintOut() {
+        return printOut;
+    }
+
     private void read(List<String> args) throws Exception{
         if(!args.isEmpty()){
             String head = head(args);
@@ -234,6 +247,10 @@ public abstract class Command implements Runnable{
         return strings;
     }
 
+    public void setPrintOut(PrintOut printOut) {
+        this.printOut = printOut;
+    }
+
     private String head(List<String> list) {
         return list.get(0);
     }
@@ -244,10 +261,6 @@ public abstract class Command implements Runnable{
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getDescription() {

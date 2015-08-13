@@ -11,17 +11,17 @@ import java.net.URLClassLoader;
  * date: 2015/8/12
  * time :22:25
  * email: zhenghui.cjb@taobao.com
- * ¶ÔÓ¦µÄagentÀà
+ * å¯¹åº”çš„agentç±»
  */
 public class Duck {
 
     public static void agentmain(String arguments, Instrumentation instrumentation) throws Exception {
-        //°Ñ´«ÈëµÄ²ÎÊıÓÃ¿Õ¸ñ·Ö¸î,×Ü¹²·ÖÎª4²¿·Ö.(Ã¿¸ö²ÎÊı¶ÔÓ¦µÄËµÃ÷¿´1.2.3µÄËµÃ÷.ÒÑ¾­ºÜÇå³şÁË)
+        //æŠŠä¼ å…¥çš„å‚æ•°ç”¨ç©ºæ ¼åˆ†å‰²,æ€»å…±åˆ†ä¸º4éƒ¨åˆ†.(æ¯ä¸ªå‚æ•°å¯¹åº”çš„è¯´æ˜çœ‹1.2.3çš„è¯´æ˜.å·²ç»å¾ˆæ¸…æ¥šäº†)
         String[] parts = arguments.split("\\s+", 4);
-        //agentËùÔÚjar,×ª³ÉURL
+        //agentæ‰€åœ¨jar,è½¬æˆURL
         URL agentJar = new File(parts[0]).toURI().toURL();
         String telephoneClassName = parts[1];
-        //terminalµÄ¼àÌı¶Ë¿ÚºÅ.¸øtelephoneÀàÊ¹ÓÃµÄ.
+        //terminalçš„ç›‘å¬ç«¯å£å·.ç»™telephoneç±»ä½¿ç”¨çš„.
         int port = Integer.parseInt(parts[2]);
 
         ClassLoader classLoader = new URLClassLoader(new URL[]{agentJar}) {
@@ -40,15 +40,15 @@ public class Duck {
             }
         };
 
-        //°ÑËùÓĞcommond¶ÔÓ¦µÄÀà,Í¨¹ıÉÏÃæ´´½¨µÄclassloader¸øloader½øÀ´.
+        //æŠŠæ‰€æœ‰commondå¯¹åº”çš„ç±»,é€šè¿‡ä¸Šé¢åˆ›å»ºçš„classloaderç»™loaderè¿›æ¥.
         Class<?>[] commandClasses = loadClasses(parts[3].split("\\s+"), classLoader);
 
-        //Í¨¹ı·´Éä,´´½¨Ò»¸ötelephoneClassµÄÊµÀı.×¢ÒâÕâÀï´«ÈëµÄ²ÎÊı.instrumentation, port, commandClasses
+        //é€šè¿‡åå°„,åˆ›å»ºä¸€ä¸ªtelephoneClassçš„å®ä¾‹.æ³¨æ„è¿™é‡Œä¼ å…¥çš„å‚æ•°.instrumentation, port, commandClasses
         Runnable executor = (Runnable) classLoader.loadClass(telephoneClassName)
                 .getConstructor(Instrumentation.class, int.class, Class[].class)
                 .newInstance(instrumentation, port, commandClasses);
 
-        //´´½¨ÓÄÁéÏß³Ì,Ö´ĞĞtelephoneClass.
+        //åˆ›å»ºå¹½çµçº¿ç¨‹,æ‰§è¡ŒtelephoneClass.
         Thread thread = new Thread(executor, "HouseMD-Duck");
         thread.setDaemon(true);
         thread.start();

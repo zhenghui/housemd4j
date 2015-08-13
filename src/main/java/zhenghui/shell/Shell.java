@@ -3,6 +3,7 @@ package zhenghui.shell;
 import jline.console.ConsoleReader;
 import zhenghui.shell.completer.CommandCompleter;
 import zhenghui.shell.exception.QuitException;
+import zhenghui.shell.print.PrintOutFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,8 +37,12 @@ public class Shell {
      */
     private ConsoleReader reader;
 
-    public Shell(String name) throws IOException {
-        reader = new ConsoleReader(System.in,System.out);
+    public Shell(String name,ConsoleReader reader) throws IOException {
+        if(reader == null){
+            this.reader = new ConsoleReader(System.in,System.out);
+        } else {
+            this.reader = reader;
+        }
         this.name = name;
     }
 
@@ -48,7 +53,7 @@ public class Shell {
         /**
          * 命令行提示符
          */
-        String prompt = name + "> ";
+        String prompt = name + ">";
         reader.setPrompt(prompt);
         reader.addCompleter(new CommandCompleter(getCommandNames()));
 
@@ -122,17 +127,61 @@ public class Shell {
 
     public void addCommand(Command command) {
         if(command != null){
+            command.setPrintOut(PrintOutFactory.build(reader));
             commandList.add(command);
         }
     }
 
-    private String head(String[] arrays){
-        if(arrays.length > 0){
-            return arrays[0];
-        } else {
-            return null;
-        }
+    /**
+     * 新增help command
+     */
+    public void addHelpCommand(){
+        Command command = new Command("help") {
+            @Override
+            public void run() {
+                String commandName = this.getParameter("command",null);
+                //如果没有带命令名，则打印所有命令的help信息
+                if(commandName == null){
+                    for(Command c : commandList){
+                        println(c.help());
+                    }
+                } else {
+                    for(Command c : commandList){
+                        if(c.getName().equals(commandName)){
+                            println(c.help());
+                        }
+                    }
+                }
+            }
+        };
+        command.setDescription("display this infomation.");
+        command.setPrintOut(PrintOutFactory.build(reader));
+        command.addParameter("command","sub command name.");
+        commandList.add(command);
     }
+
+    /**
+     * 新增结束命令
+     */
+    public void addQuitCommand(){
+        Command quitCommand = new Command("quit") {
+            @Override
+            public void run() {
+                throw new QuitException();
+            }
+        };
+        quitCommand.setDescription("terminate the process.");
+        quitCommand.setPrintOut(PrintOutFactory.build(reader));
+        commandList.add(quitCommand);
+    }
+
+//    private String head(String[] arrays){
+//        if(arrays.length > 0){
+//            return arrays[0];
+//        } else {
+//            return null;
+//        }
+//    }
 
     private String[] tail(String[] arrays){
         int length = arrays.length;

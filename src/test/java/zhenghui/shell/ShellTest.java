@@ -11,7 +11,7 @@ import zhenghui.shell.exception.QuitException;
 public class ShellTest {
 
     public static void main(String[] args) throws Exception {
-        Shell shell = new Shell("zhenghui");
+        Shell shell = new Shell("zhenghui",null);
 
         /**
          * 结束命令
@@ -23,17 +23,8 @@ public class ShellTest {
             }
         };
 
-        /**
-         * 结束命令
-         */
-        Command quitCommand = new Command("quit") {
-            @Override
-            public void run() {
-                throw new QuitException();
-            }
-        };
-
-        shell.addCommand(quitCommand);
+        shell.addQuitCommand();
+        shell.addHelpCommand();
         shell.addCommand(printCommand);
 
         shell.interact();
