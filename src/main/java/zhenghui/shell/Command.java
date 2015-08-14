@@ -59,9 +59,9 @@ public abstract class Command extends Loggable implements Runnable{
         this.name = name;
 
         //默认添加help 的flag
-        List<String> names = Arrays.asList("-h","--help");
-        String desc = "show help infomation of this command.";
-        addFlag(names,desc,false);
+//        List<String> names = Arrays.asList("-h","--help");
+//        String desc = "show help infomation of this command.";
+//        addFlag(names,desc,false);
     }
 
     public String help(){

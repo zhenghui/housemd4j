@@ -2,6 +2,7 @@ package zhenghui.main;
 
 import com.sun.tools.attach.VirtualMachine;
 import zhenghui.shell.Command;
+import zhenghui.util.Util;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -54,8 +55,8 @@ public class Main extends Command {
             }
             System.out.println("Welcome to HouseMD "+getVersion());
             VirtualMachine virtualMachine = VirtualMachine.attach(this.getParameter("pid","0"));
-            virtualMachine.loadAgent(getAgentJar());
-
+            virtualMachine.loadAgent(Util.getAgentJar(this.getClass()));
+            virtualMachine.detach();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -63,27 +64,13 @@ public class Main extends Command {
     }
 
     private String getVersion() throws IOException {
-        JarInputStream stream = new JarInputStream(new FileInputStream(getAgentJar()));
+        JarInputStream stream = new JarInputStream(new FileInputStream(Util.getAgentJar(this.getClass())));
         try {
             Attributes attributes = stream.getManifest().getMainAttributes();
             return attributes.getValue(Attributes.Name.SIGNATURE_VERSION);
         } finally {
             stream.close();
         }
-    }
-
-    /**
-     * 获取agent jar包所在的地址
-     *
-     */
-    private String getAgentJar() {
-        String path = this.getClass().getResource("").getFile();
-        if (path != null) {
-            path = path.replace("!/zhenghui/main/", "");
-            //不支持windows，所以不考虑windows的情况
-            path = path.replace("file:","");
-        }
-        return path;
     }
 
 }
