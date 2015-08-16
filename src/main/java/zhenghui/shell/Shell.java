@@ -1,11 +1,14 @@
 package zhenghui.shell;
 
+import jline.NoInterruptUnixTerminal;
+import jline.Terminal;
 import jline.console.ConsoleReader;
 import zhenghui.shell.completer.CommandCompleter;
 import zhenghui.shell.exception.QuitException;
 import zhenghui.shell.print.PrintOutFactory;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,9 +40,10 @@ public class Shell {
      */
     private ConsoleReader reader;
 
-    public Shell(String name,ConsoleReader reader) throws IOException {
+    public Shell(String name,ConsoleReader reader) throws Exception {
         if(reader == null){
-            this.reader = new ConsoleReader(System.in,System.out);
+            Terminal terminal = new NoInterruptUnixTerminal();
+            this.reader = new ConsoleReader(System.in,System.out, terminal);
         } else {
             this.reader = reader;
         }
@@ -106,7 +110,9 @@ public class Shell {
             }
         }
         //如果没有这个命令
-        System.out.println("Unknown command: "+commandName);
+        Writer writer = reader.getOutput();
+        writer.write("Unknown command: " + commandName+"\n");
+        writer.flush();
     }
 
     public String getName() {

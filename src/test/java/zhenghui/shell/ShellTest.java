@@ -1,6 +1,5 @@
 package zhenghui.shell;
 
-import zhenghui.shell.exception.QuitException;
 
 /**
  * User: zhenghui

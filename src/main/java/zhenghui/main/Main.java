@@ -1,6 +1,8 @@
 package zhenghui.main;
 
 import com.sun.tools.attach.VirtualMachine;
+import zhenghui.agent.Telephone;
+import zhenghui.command.Loaded;
 import zhenghui.shell.Command;
 import zhenghui.util.Util;
 
@@ -8,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.util.Arrays;
+import java.util.concurrent.CountDownLatch;
 import java.util.jar.Attributes;
 import java.util.jar.JarInputStream;
 
@@ -20,6 +23,8 @@ import java.util.jar.JarInputStream;
  */
 public class Main extends Command {
 
+    private static CountDownLatch countDownLatch = new CountDownLatch(1);
+
     public Main() {
         super("housemd4j");
         super.setDescription("a runtime diagnosis tool of JVM.");
@@ -28,6 +33,11 @@ public class Main extends Command {
 
     public static void main(String[] args) {
         new Main().run();
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -45,20 +55,37 @@ public class Main extends Command {
     @Override
     public void run() {
         try {
-            if (ManagementFactory.getOperatingSystemMXBean().getName().toLowerCase().contains("window")) {
-                throw new IllegalStateException("Sorry, Windows is not supported now.");
-            }
+            //todo for test
+//            if (ManagementFactory.getOperatingSystemMXBean().getName().toLowerCase().contains("window")) {
+//                throw new IllegalStateException("Sorry, Windows is not supported now.");
+//            }
             //如果只是打印版本信息
             if(this.getFlag("-v")){
                 System.out.println("v"+getVersion());
                 return;
             }
+
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        new Mobilephone(Integer.parseInt(getPort()),countDownLatch).listen();
+                    } catch (Exception e) {
+                        error("zhenghui.main.Mobilephone.listen error");
+                        e.printStackTrace();
+                    }
+                }
+            });
+
             System.out.println("Welcome to HouseMD "+getVersion());
             VirtualMachine virtualMachine = VirtualMachine.attach(this.getParameter("pid","0"));
-            virtualMachine.loadAgent(Util.getAgentJar(this.getClass()));
+            virtualMachine.loadAgent(Util.getAgentJar(this.getClass()),prepareArgs());
             virtualMachine.detach();
 
+            thread.start();
+
         } catch (Exception e) {
+            error(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -71,6 +98,27 @@ public class Main extends Command {
         } finally {
             stream.close();
         }
+    }
+
+    //todo for test
+    String agentJarPath = "";
+
+    private static final String SPACE = " ";
+
+    private String prepareArgs(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(agentJarPath).append(SPACE);
+        sb.append(Telephone.class.getName()).append(SPACE);
+        sb.append(getPort()).append(SPACE);
+        sb.append(Loaded.class.getName());
+        return sb.toString();
+    }
+
+    /**
+     * 监听端口号。默认54321
+     */
+    private String getPort(){
+        return  getOption("-p", "54321");
     }
 
 }
