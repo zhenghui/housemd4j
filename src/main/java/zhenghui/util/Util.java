@@ -1,5 +1,7 @@
 package zhenghui.util;
 
+import jline.Terminal;
+
 /**
  * User: zhenghui
  * Date: 15-8-14
@@ -15,10 +17,16 @@ public class Util {
     public static String getAgentJar(Class clazz){
         String path = clazz.getResource("").getFile();
         if (path != null) {
-            path = path.replace("!/zhenghui/main/", "");
+            if(path.contains("!")){
+                path = path.substring(0,path.indexOf("!"));
+            }
             //不支持windows，所以不考虑windows的情况
             path = path.replace("file:","");
         }
         return path;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(Util.getAgentJar(Terminal.class));
     }
 }

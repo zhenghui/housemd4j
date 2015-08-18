@@ -15,7 +15,7 @@ import java.net.URLClassLoader;
  * email: zhenghui.cjb@taobao.com
  * 对应的agent类
  */
-public class Duck {
+public class Duck2 {
 
     public static void agentmain(String arguments, Instrumentation instrumentation) throws Exception {
         File file = new File("/tmp/housemd4j/error.log");
@@ -69,10 +69,13 @@ public class Duck {
     }
 
     public static void main(String[] args) throws Exception {
-        String strs = "/home/zhenghui/workspace/housemd4j/zhenghui-agent-test-1.0.0-20150818.035250-12." +
-                "jar zhenghui.agent.Telephone 54321 zhenghui.command.Loaded";
-        Duck.agentmain(strs,null);
-        while (true){}
+        String strs = "/home/zhenghui/workspace/housemd4j/housemd4j.jar zhenghui.agent.Telephone 54321 zhenghui.command.Loaded";
+//        Duck.agentmain(strs,null);
+//        while (true){}
+        File file = new File("/tmp/housemd4j/error.log");
+        FileWriter fileWriter = new FileWriter(file);
+        fileWriter.write("null");
+        fileWriter.close();
     }
 
     private static void  writeToFile(String msg,File file) throws IOException {

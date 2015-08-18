@@ -19,7 +19,7 @@ import java.util.concurrent.CountDownLatch;
  * email: zhenghui.cjb@taobao.com
  * 这个类是给agent 客户端发送线程，并打印接受回复的类
  */
-public class Mobilephone {
+public class Mobilephone implements Runnable{
 
     private int port;
 
@@ -164,4 +164,8 @@ public class Mobilephone {
         key.interestOps(key.interestOps() & ~op);
     }
 
+    @Override
+    public void run() {
+        listen();
+    }
 }

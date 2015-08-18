@@ -9,6 +9,7 @@ import zhenghui.shell.print.PrintOut;
 import zhenghui.shell.print.PrintOutFactory;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Constructor;
@@ -59,10 +60,11 @@ public class Telephone implements Runnable {
 
             shell.interact();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
+        }catch (Exception e) {
+            try {
+                writeToFile(e,new File("/tmp/housemd4j/error.log"));
+            } catch (IOException ignored) {
+            }
         } finally {
             TerminalFactory.reset();
             if(history != null){
@@ -92,5 +94,18 @@ public class Telephone implements Runnable {
         Constructor<Command> constructor = clazz.getConstructor(Instrumentation.class,PrintOut.class);
 
         return constructor.newInstance(instrumentation,printOut);
+    }
+
+    private static void  writeToFile(Throwable throwable,File file) throws IOException {
+        FileWriter fileWriter = new FileWriter(file);
+        fileWriter.write(throwable.getClass().getName()+" : " + throwable.getLocalizedMessage() +"\r\n");
+        StackTraceElement[] stackElements = throwable.getStackTrace();//通过Throwable获得堆栈信息
+        for (StackTraceElement stackElement : stackElements) {
+            fileWriter.write(stackElement.getClassName() + "\t");
+            fileWriter.write(stackElement.getFileName()+"\t");
+            fileWriter.write(stackElement.getLineNumber() + "\t");
+            fileWriter.write(stackElement.getMethodName() +"\t\n");
+        }
+        fileWriter.close();
     }
 }
