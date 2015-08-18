@@ -185,6 +185,7 @@ public abstract class Command extends Loggable implements Runnable{
      */
     public void parse(String[] args) throws Exception {
         values.clear();
+        index = 0;
         read(Arrays.asList(args));
     }
 

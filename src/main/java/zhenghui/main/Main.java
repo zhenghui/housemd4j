@@ -55,10 +55,9 @@ public class Main extends Command {
     @Override
     public void run() {
         try {
-            //todo for test
-//            if (ManagementFactory.getOperatingSystemMXBean().getName().toLowerCase().contains("window")) {
-//                throw new IllegalStateException("Sorry, Windows is not supported now.");
-//            }
+            if (ManagementFactory.getOperatingSystemMXBean().getName().toLowerCase().contains("window")) {
+                throw new IllegalStateException("Sorry, Windows is not supported now.");
+            }
            // 如果只是打印版本信息
             if(this.getFlag("-v")){
                 System.out.println("v"+getVersion());
@@ -68,10 +67,8 @@ public class Main extends Command {
             Thread thread = new Thread(new Mobilephone(Integer.parseInt(getPort()),countDownLatch));
 
             System.out.println("Welcome to HouseMD "+getVersion());
-            VirtualMachine virtualMachine = VirtualMachine.attach(this.getParameter("pid","6358"));
-            //todo test
-            virtualMachine.loadAgent("/home/zhenghui/workspace/housemd4j/housemd4j.jar",prepareArgs());
-//            virtualMachine.loadAgent(Util.getAgentJar(this.getClass()),prepareArgs());
+            VirtualMachine virtualMachine = VirtualMachine.attach(this.getParameter("pid","29011"));
+            virtualMachine.loadAgent(Util.getAgentJar(this.getClass()),prepareArgs());
             virtualMachine.detach();
 
             thread.start();
@@ -83,9 +80,7 @@ public class Main extends Command {
     }
 
     private String getVersion() throws IOException {
-        //todo for test
-//        JarInputStream stream = new JarInputStream(new FileInputStream(Util.getAgentJar(this.getClass())));
-        JarInputStream stream = new JarInputStream(new FileInputStream("/home/zhenghui/workspace/housemd4j/housemd4j.jar"));
+        JarInputStream stream = new JarInputStream(new FileInputStream(Util.getAgentJar(this.getClass())));
         try {
             Attributes attributes = stream.getManifest().getMainAttributes();
             return attributes.getValue(Attributes.Name.SIGNATURE_VERSION);
@@ -94,16 +89,12 @@ public class Main extends Command {
         }
     }
 
-    //todo for test
-    String agentJarPath = "";
 
     private static final String SPACE = " ";
 
     private String prepareArgs(){
         StringBuilder sb = new StringBuilder();
-        //todo test
-        sb.append("/home/zhenghui/workspace/housemd4j/housemd4j.jar").append(SPACE);
-//        sb.append(Util.getAgentJar(this.getClass())).append(SPACE);
+        sb.append(Util.getAgentJar(this.getClass())).append(SPACE);
         sb.append(Telephone.class.getName()).append(SPACE);
         sb.append(getPort()).append(SPACE);
         sb.append(Loaded.class.getName());

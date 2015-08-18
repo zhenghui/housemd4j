@@ -2,6 +2,7 @@ package zhenghui.main;
 
 import jline.NoInterruptUnixTerminal;
 import jline.Terminal;
+import jline.TerminalFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,8 +43,8 @@ public class Mobilephone implements Runnable{
         serverSocketChannel.socket().bind(new InetSocketAddress(port));
         serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 
-        Terminal terminal = new NoInterruptUnixTerminal();
-        terminal.init();
+        Terminal terminal = TerminalFactory.get();
+//        terminal.init();
         sout = terminal.wrapOutIfNeeded(System.out);
         sin = terminal.wrapInIfNeeded(System.in);
 

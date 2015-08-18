@@ -2,6 +2,9 @@ package zhenghui.util;
 
 import jline.Terminal;
 
+import java.net.URL;
+import java.security.CodeSource;
+
 /**
  * User: zhenghui
  * Date: 15-8-14
@@ -15,15 +18,23 @@ public class Util {
      * @param clazz class
      */
     public static String getAgentJar(Class clazz){
-        String path = clazz.getResource("").getFile();
-        if (path != null) {
-            if(path.contains("!")){
-                path = path.substring(0,path.indexOf("!"));
-            }
-            //不支持windows，所以不考虑windows的情况
-            path = path.replace("file:","");
+        CodeSource codeSource = clazz.getProtectionDomain().getCodeSource();
+        URL url = null;
+        if(codeSource == null){
+            url = clazz.getResource("/" + clazz.getName().replace('.', '/') + ".class");
+        } else {
+            url = codeSource.getLocation();
         }
-        return path;
+        return url.toString().substring(url.toString().indexOf("file:")+5);
+//        String path = clazz.getResource("").getFile();
+//        if (path != null) {
+//            if(path.contains("!")){
+//                path = path.substring(0,path.indexOf("!"));
+//            }
+//            //不支持windows，所以不考虑windows的情况
+//            path = path.replace("file:","");
+//        }
+//        return path;
     }
 
     public static void main(String[] args) {

@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
 Agent-Class: zhenghui.agent.Duck5
-Signature-Version: 1.0
+Main-Class: zhenghui.main.Main
 Can-Redefine-Classes: true
+Signature-Version: 1.0
 

@@ -42,8 +42,8 @@ public class Shell {
 
     public Shell(String name,ConsoleReader reader) throws Exception {
         if(reader == null){
-            Terminal terminal = new NoInterruptUnixTerminal();
-            this.reader = new ConsoleReader(System.in,System.out, terminal);
+//            Terminal terminal = new NoInterruptUnixTerminal();
+            this.reader = new ConsoleReader(System.in,System.out);
         } else {
             this.reader = reader;
         }
