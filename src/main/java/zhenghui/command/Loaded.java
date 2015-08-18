@@ -50,6 +50,7 @@ public class Loaded extends Command{
                 return;
             }
         }
+        warn("can not find the class.name= "+ className);
     }
 
     private void layout(ClassLoader classLoader,String lastIndents) {

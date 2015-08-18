@@ -25,14 +25,15 @@ public class Main extends Command {
 
     private static CountDownLatch countDownLatch = new CountDownLatch(1);
 
-    public Main() {
+    public Main(String[] args) throws Exception {
         super("housemd4j");
         super.setDescription("a runtime diagnosis tool of JVM.");
         prepare();
+        super.parse(args);
     }
 
-    public static void main(String[] args) {
-        new Main().run();
+    public static void main(String[] args) throws Exception {
+        new Main(args).run();
         try {
             countDownLatch.await();
         } catch (InterruptedException e) {
