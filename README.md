@@ -4,6 +4,7 @@
 ## 准备
 
 1. 打包。请把jline也打包到housemd4j.jar 中
+2. 注意 MANIFEST.MF 中的定义。
 
 ## 启动
 
